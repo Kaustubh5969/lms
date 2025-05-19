@@ -16,7 +16,7 @@ router.post('/signup', async (req, res) => {
         console.log('Data Saved');
 
         const payload = {
-            id : response.id,
+            id: response.id,
             email: response.email
         }
         const token = generateToken(payload);
@@ -31,14 +31,14 @@ router.post('/signup', async (req, res) => {
 
 })
 
-router.post('/login', async(req, res) => {
-    try{
-        const {email, password} = req.body;
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-        const user = await User.findOne({email: email});
+        const user = await User.findOne({ email: email });
 
-        if( !user || !(await user.comparePassword(password))){
-            return res.status(401).json({error: 'Invalid username or password'});
+        if (!user || !(await user.comparePassword(password))) {
+            return res.status(401).json({ error: 'Invalid username or password' });
         }
 
         const payload = {
@@ -47,8 +47,16 @@ router.post('/login', async(req, res) => {
         }
         const token = generateToken(payload);
 
-        res.json({token})
-    }catch(err){
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                username: user.name,
+                email: user.email,
+                mobile: user.mobile,
+            }
+        });
+    } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -57,12 +65,11 @@ router.post('/login', async(req, res) => {
 
 
 
-router.get('/', jwtAuthMiddleware,async (req, res) => {
+router.get('/allUsers', jwtAuthMiddleware, async (req, res) => {
     try {
         const data = await User.find();
         console.log('Data fetch');
         res.status(200).json(data);
-
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -75,6 +82,10 @@ router.put('/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const updateData = req.body;
+
+        if (req.file) {
+            updateData.proimg = req.file.filename; // Save only filename
+        }
 
         if (updateData.password) {
             const saltRounds = 10; // Number of hashing rounds

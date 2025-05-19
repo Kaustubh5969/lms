@@ -24,4 +24,10 @@ app.use('/user', UserRoute);
 app.use('/student', StudentsRoute);
 app.use('/book', BooksRoute);
 app.use('/transaction', TransactionsRoute);
+const path = require("path");
+
+app.use("/IMG", express.static(path.join(__dirname, "public/IMG")));
+
+
+
 

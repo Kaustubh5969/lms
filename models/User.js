@@ -2,33 +2,45 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true,
     },
-    mobile:{
+    mobile: {
         type: Number,
-        required:true,
-        unique:true,
+        required: true,
+        unique: true,
     },
-    email:{
+    email: {
         type: String,
-        required:true,
-        unique:true
-    }, 
-    password:{
+        required: true,
+        unique: true
+    },
+    password: {
         type: String,
-        required : true
-    }
+        required: true
+    },
+    dob: {
+        type: Date,
+    },
+    age: {
+        type: Number,
+    },
+    gender: {
+        type: String,
+    },
+    proimg: {
+        type: String,
+    },
 })
 
 
 // Password hashing.
 
-userSchema.pre('save', async function(next){
+userSchema.pre('save', async function (next) {
     const user = this;
 
-    if(!user.isModified('password')) return next();
+    if (!user.isModified('password')) return next();
 
     try {
         const salt = await bcrypt.genSalt(10);
@@ -36,7 +48,7 @@ userSchema.pre('save', async function(next){
         const hashPassword = await bcrypt.hash(user.password, salt);
 
         user.password = hashPassword;
-        next();        
+        next();
     } catch (err) {
         return next(err);
     }
@@ -45,7 +57,7 @@ userSchema.pre('save', async function(next){
 
 // Password matching funtion
 
-userSchema.methods.comparePassword = async function(userPassword){
+userSchema.methods.comparePassword = async function (userPassword) {
     try {
         const isMatch = await bcrypt.compare(userPassword, this.password);
         return isMatch;

@@ -11,13 +11,13 @@ const booksSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required:true,
-        enum:['History','Biography','fairy Tale','Mystery','Science','Poerty','Drama','Other'],
+        required: true,
+        enum: ['History', 'Biography', 'fairy Tale', 'Mystery', 'Science', 'Poerty', 'Drama', 'Other'],
     },
     status: {
         type: String,
-        default:"Available",
-        required:true,
+        default: "Available",
+        required: true,
     },
     price: {
         type: Number,

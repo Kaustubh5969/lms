@@ -18,11 +18,16 @@ const transactionSchema = new mongoose.Schema({
         required: true,
     },
     return_date: {
-        type: Date,        
+        type: Date,
     },
     teacher: {
         type: String,
-        required : true,
+        required: true,
+    },
+    studentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Students",
+        required: true
     }
 });
 
