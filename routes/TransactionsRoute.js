@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Transactions = require('../models/Transactions');
+const Category = require('../models/Category');
 
 router.post('/borrow', async (req, res) => {
 
@@ -20,6 +21,7 @@ router.post('/borrow', async (req, res) => {
     }
 
 })
+
 
 
 
